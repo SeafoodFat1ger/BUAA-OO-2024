@@ -1,0 +1,36 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+
+
+
+Main -> InputThread: start
+Main -> Schedule: start
+Main -> Elevator: start
+
+InputThread -> Schedule: addPersonRequest
+Schedule -> Schedule:change changeMan number
+Schedule -> RequestTable:addPerson
+Elevator -> Elevator: MOVE
+Elevator -> Elevator: WAIT
+Elevator -> Elevator: REVERSE
+Elevator -> Elevator: OPEN
+RequestTable --> Elevator:delPerson
+Elevator --> Schedule:change changeMan number
+
+InputThread -> Schedule: addResetRequest
+Schedule -> RequestTable: setReset
+Elevator -> Elevator: RESET
+RequestTable --> Schedule: returnPerson
+
+InputThread -> Schedule: addDCRequest
+Schedule -> RequestTable: setDCReset
+RequestTable --> Elevator:OVER
+RequestTable --> Schedule: returnPerson
+Schedule -> Elevator: create new
+Schedule -> RequestTable: create new
+
+InputThread -> Schedule:setEnd
+Schedule -> RequestTable:setEnd
+RequestTable --> Elevator:OVER
+@enduml
